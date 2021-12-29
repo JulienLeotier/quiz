@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from api.models import Player, Question, Score
+
+admin.site.register(Player)
+admin.site.register(Score)
+admin.site.register(Question)
