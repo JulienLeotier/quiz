@@ -36,6 +36,7 @@ class Score(models.Model):
 
 class Question(models.Model):
     question = models.CharField(_("question"), max_length=250)
+    activate = models.BooleanField(_("activate"), default=True)
     response = models.CharField(_("response"), max_length=250)
     image = models.ImageField(_("image"), upload_to="static/image/", height_field=None,
                               width_field=None, max_length=None, blank=True, null=True)

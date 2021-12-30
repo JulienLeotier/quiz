@@ -1,0 +1,138 @@
+<!-- chat/templates/chat/admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin page</title>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a class="active" href="#test1">Question</a></li>
+        <li class="tab col s3"><a href="#test2">Audio</a></li>
+        <li class="tab col s3"><a href="#test3">Vidéo</a></li>
+        <li class="tab col s3"><a href="#test4">Image</a></li>
+      </ul>
+    </div>
+    <div id="test1" class="col s12">
+      <div class="row">
+        <div class="col s12 m12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title" id="question">Card Title</span>
+              <p id="props1">Proposition 1</p>
+              <p id="props2">Proposition 2</p>
+              <p id="props3">Proposition 3</p>
+              <p id="props4">Proposition 4</p>
+            </div>
+            <div class="card-action">
+              <a href="#" id="resp">Response</a>
+              <a href="#" id="suivant">Question suivante</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="test2" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <audio id="audio" controls preload="none" style="margin-left: 33%;
+          margin-top: 10%;">
+            <source id="my_audio" src="">
+            Your browser does not support the audio format.
+          </audio>
+        </div>
+      </div>
+
+    </div>
+    <div id="test3" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <video id="video" style="margin-left: 33%;
+      margin-top: 10%;" width="320" height="240" controls></video>
+        </div>
+      </div>
+    </div>
+    <div id="test4" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <div class="card-image">
+            <img id="image1" src="" alt="image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{ room_name|json_script:"room-name" }}
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>
+    var el = document.querySelector('.tabs');
+    var instance = M.Tabs.init(el, {});
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    console.log(roomName)
+
+    const chatSocket = new WebSocket(
+      'ws://' +
+      window.location.host +
+      '/ws/chat/' +
+      roomName +
+      '/'
+    );
+
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      document.querySelector('#question').innerHTML = 'Question : ' + data.message.question || data.message
+      document.querySelector('#resp').innerHTML = 'Réponse : ' + data.message.response || data.message
+      document.querySelector('#props1').innerHTML = 'A : ' + data.message.propositionOne || data.message
+      document.querySelector('#props2').innerHTML = 'B : ' + data.message.propositionTwo || data.message
+      document.querySelector('#props3').innerHTML = 'C : ' + data.message.propositionThree || data.message
+      document.querySelector('#props4').innerHTML = 'D : ' + data.message.propositionFour || data.message
+      if (data.message.audio !== '' && data.message.audio !== undefined) {
+        var audio = document.querySelector('#audio')
+        document.querySelector('#my_audio').src = '/' + data.message.audio
+        audio.load()
+      }
+      if (data.message.image !== '' && data.message.image !== undefined) {
+        var image = document.getElementById("image1");
+        image.src = '/' + data.message.image
+      }
+      if (data.message.video !== '' && data.message.video !== undefined) {
+        var video = document.getElementById('video');
+        var source = document.createElement('source');
+
+        source.setAttribute('src', '/' + data.message.video);
+        source.setAttribute('type', 'video/webm');
+        video.appendChild(source);
+        video.load()
+      }
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#suivant').onclick = function (e) {
+      chatSocket.send(JSON.stringify({
+        'message': {
+          'message': 'suivant',
+        }
+      }));
+    };
+  </script>
+</body>
+
+</html>

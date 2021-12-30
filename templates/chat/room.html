@@ -41,7 +41,12 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message
+                'message': {
+                  'message': message,
+                  'player': '1',
+                  'question': '1',
+                  'response': '2'
+                }
             }));
             messageInputDom.value = '';
         };
