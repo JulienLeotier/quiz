@@ -136,3 +136,5 @@ STATICFILES_DIRS = (os.path.join('static'), )
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = '/room/1/'
+LOGIN_URL = '/'

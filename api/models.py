@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext as _
 from django.conf import settings
 
@@ -22,7 +23,7 @@ class Player(models.Model):
 class Score(models.Model):
     player = models.ForeignKey("Player", verbose_name=_(
         "players"), on_delete=models.CASCADE)
-    score = models.IntegerField(_("score"))
+    score = models.IntegerField(_("score"), default=0)
 
     class Meta:
         db_table = 'score'
@@ -61,3 +62,18 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class Last_question(models.Model):
+    question = models.ForeignKey("Question", verbose_name=_(
+        "question"), on_delete=models.CASCADE, blank=True, null=True)
+    room = models.CharField(_("room"), max_length=50)
+
+    class Meta:
+        db_table = 'last_question'
+        managed = True
+        verbose_name = 'last_question'
+        verbose_name_plural = 'last_questions'
+
+    def __str__(self) -> str:
+        return self.room

@@ -17,8 +17,13 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 
+from chat import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('chat/', include('chat.urls')),
+    path('', views.index.as_view(), name='index'),
+    path('room/<str:room_name>/', views.room, name='room'),
+    path('room/admin/<str:room_name>/', views.admin, name='admin'),
+    path('room/admin/display/<str:room_name>/', views.display, name='display'),
 ]

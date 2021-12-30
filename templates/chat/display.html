@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Quiz room</title>
+  <title>QUIZ DISPLAY</title>
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
@@ -17,11 +17,12 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s6"><a class="active" href="#test1">Question</a></li>
-        <li class="tab col s6"><a href="#test2">Score</a></li>
+        <li class="tab col s3"><a href="#test1" class="active" id="tab2">Question</a></li>
+        <li class="tab col s2"><a href="#test2" id="tab3">Audio</a></li>
+        <li class="tab col s2"><a href="#test3" id="tab4">Vidéo</a></li>
+        <li class="tab col s2"><a href="#test4" id="tab5">Image</a></li>
       </ul>
     </div>
-    <div id="test1" class="col s12">
       <div class="row">
         <div class="col s12 m12">
           <div class="card">
@@ -62,8 +63,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <div id="test2" class="col s12">
+    <div id="test1" class="col s12">
       <div class="row">
         <div class="col s12">
           <table>
@@ -91,6 +91,33 @@
       </div>
 
     </div>
+    <div id="test2" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <audio id="audio" controls preload="none" style="margin-left: 33%;">
+            <source id="my_audio" src="">
+            Your browser does not support the audio format.
+          </audio>
+        </div>
+      </div>
+
+    </div>
+    <div id="test3" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <video id="video" style="margin-left: 33%;" width="320" height="240" controls></video>
+        </div>
+      </div>
+    </div>
+    <div id="test4" class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <div class="card-image">
+            <img id="image1" src="" style="margin-left: 33%" alt="image">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   {{ room_name|json_script:"room-name" }}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -115,8 +142,13 @@
       } 
       else if(data.type === 'score'){
         document.querySelector('#' + data.player + '-score').innerHTML = data.message
+        document.querySelector('#tab1').replace("active", "");
+        document.querySelector('#tab2').replace("", "active");
+        document.querySelector('#tab3').replace("active", "");
+        document.querySelector('#tab4').replace("active", "");
+        document.querySelector('#tab5').replace("active", "");
+
       } else {
-   
         document.querySelector('#props3').disabled = false
         document.querySelector('#props2').disabled = false
         document.querySelector('#props1').disabled = false
@@ -124,6 +156,24 @@
         document.querySelector('#question').innerHTML = data.message.question || data.message
         document.querySelector('#props1').innerHTML = data.message.propositionOne || data.message
         document.querySelector('#props2').innerHTML = data.message.propositionTwo || data.message
+        if (data.message.audio !== '' && data.message.audio !== undefined) {
+          var audio = document.querySelector('#audio')
+          document.querySelector('#my_audio').src = '/' + data.message.audio
+          audio.load()
+        }
+        if (data.message.image !== '' && data.message.image !== undefined) {
+          var image = document.getElementById("image1");
+          image.src = '/' + data.message.image
+        }
+        if (data.message.video !== '' && data.message.video !== undefined) {
+          var video = document.getElementById('video');
+          var source = document.createElement('source');
+  
+          source.setAttribute('src', '/' + data.message.video);
+          source.setAttribute('type', 'video/webm');
+          video.appendChild(source);
+          video.load()
+        }
         if(data.message.propositionThree !== null){
           document.querySelector('#c').style.display = 'block'
           document.querySelector('#d').style.display = 'block'
