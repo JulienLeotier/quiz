@@ -9,7 +9,7 @@ class Player(models.Model):
         "player"), on_delete=models.CASCADE)
     photo = models.ImageField(_("photo"), upload_to="static/player/", height_field=None,
                               width_field=None, max_length=None, blank=True, null=True)
-
+    number = models.IntegerField(_("number"), default=0)
     class Meta:
         db_table = 'Player'
         managed = True

@@ -31,5 +31,6 @@ urlpatterns = [
     path('room/admin/<str:room_name>/', views.admin, name='admin'),
     path('root/', views.ref, name='ref'),
     path('root/admin/', views.refadmin, name='ref'),
+    path('tab/', views.tab, name='tab'),
     path('room/admin/display/<str:room_name>/', views.display, name='display'),
 ]

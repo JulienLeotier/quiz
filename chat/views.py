@@ -89,3 +89,10 @@ def ref(request):
 
 def refadmin(request):
     return render(request, 'chat/refadmin.html')
+
+
+def tab(request):
+    players = Player.objects.all()
+    return render(request, 'chat/tableauDisplay.html', {
+        'players': players
+    })
