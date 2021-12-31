@@ -53,6 +53,8 @@ class Question(models.Model):
         _("propositionThree"), max_length=250, blank=True, null=True)
     propositionFour = models.CharField(
         _("propositionFour"), max_length=250, blank=True, null=True)
+    categorie = models.ForeignKey("Categorie", verbose_name=_(
+        "Categorie"), on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         db_table = 'Question'
@@ -77,3 +79,18 @@ class Last_question(models.Model):
 
     def __str__(self) -> str:
         return self.room
+
+
+class Categorie(models.Model):
+    name = models.CharField(_("name"), max_length=250)
+    nameId = models.CharField(_("nameId"), max_length=250)
+    activate = models.BooleanField(_("activate"), default=True)
+
+    class Meta:
+        db_table = 'categorie'
+        managed = True
+        verbose_name = 'Categorie'
+        verbose_name_plural = 'Categories'
+
+    def __str__(self):
+        return self.name

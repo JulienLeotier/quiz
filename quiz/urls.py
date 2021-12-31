@@ -24,6 +24,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index.as_view(), name='index'),
     path('room/<str:room_name>/', views.room, name='room'),
+    path('categories/<str:room_name>/', views.roomCategories, name='room'),
+    path('categories/admin/<str:room_name>/',
+         views.adminCatagorie, name='room'),
+    path('onlyQuestion/<str:room_name>/', views.onlyQuestion, name='question'),
     path('room/admin/<str:room_name>/', views.admin, name='admin'),
+    path('root/', views.ref, name='ref'),
+    path('root/admin/', views.refadmin, name='ref'),
     path('room/admin/display/<str:room_name>/', views.display, name='display'),
 ]

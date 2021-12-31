@@ -7,7 +7,7 @@ from django.conf import settings
 # Create your views here.
 from django.shortcuts import render
 
-from api.models import Player, Score
+from api.models import Categorie, Player, Score
 
 class index(TemplateView):
 
@@ -48,3 +48,44 @@ def display(request, room_name):
         'players': players,
         'scores': scores
     })
+
+def roomCategories(request, room_name):
+    players = Player.objects.all()
+    scores = Score.objects.all()
+    categories = Categorie.objects.all()
+    return render(request, 'chat/roomCategories.html', {
+        'room_name': room_name,
+        'players': players,
+        'scores': scores,
+        'categories': categories
+    })
+
+
+
+def onlyQuestion(request, room_name):
+    players = Player.objects.all()
+    scores = Score.objects.all()
+    return render(request, 'chat/onlyQuestion.html', {
+        'room_name': room_name,
+        'players': players,
+        'scores': scores,
+        'categorie': room_name
+    })
+
+def adminCatagorie(request, room_name):
+    players = Player.objects.all()
+    scores = Score.objects.all()
+    categories = Categorie.objects.all()
+    return render(request, 'chat/adminCategories.html', {
+        'room_name': room_name,
+        'players': players,
+        'scores': scores,
+        'categories': categories
+    })
+
+
+def ref(request):
+    return render(request, 'chat/ref.html')
+
+def refadmin(request):
+    return render(request, 'chat/refadmin.html')

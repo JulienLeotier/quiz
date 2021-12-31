@@ -116,11 +116,28 @@
       else if(data.type === 'score'){
         document.querySelector('#' + data.player + '-score').innerHTML = data.message
       } else {
-   
-        document.querySelector('#props3').disabled = false
-        document.querySelector('#props2').disabled = false
-        document.querySelector('#props1').disabled = false
-        document.querySelector('#props4').disabled = false
+        var response = localStorage.getItem('response');
+        if(response){
+          console.log(response)
+          console.log(data.message.question)
+          if(response == `"${data.message.question}"`){
+            document.querySelector('#props3').disabled = true
+            document.querySelector('#props2').disabled = true
+            document.querySelector('#props1').disabled = true
+            document.querySelector('#props4').disabled = true
+          } else {
+            document.querySelector('#props3').disabled = false
+            document.querySelector('#props2').disabled = false
+            document.querySelector('#props1').disabled = false
+            document.querySelector('#props4').disabled = false  
+          }
+        } else {
+          document.querySelector('#props3').disabled = false
+          document.querySelector('#props2').disabled = false
+          document.querySelector('#props1').disabled = false
+          document.querySelector('#props4').disabled = false
+          localStorage.clear();
+        }
         document.querySelector('#question').innerHTML = data.message.question || data.message
         document.querySelector('#props1').innerHTML = data.message.propositionOne || data.message
         document.querySelector('#props2').innerHTML = data.message.propositionTwo || data.message
@@ -144,6 +161,7 @@
       document.querySelector('#props2').disabled = true
       document.querySelector('#props1').disabled = true
       document.querySelector('#props4').disabled = true
+      localStorage.setItem('response', `"${document.querySelector('#question').innerText}"`);
       chatSocket.send(JSON.stringify({
         'message': {
           'type': 'response',
@@ -158,6 +176,7 @@
       document.querySelector('#props2').disabled = true
       document.querySelector('#props1').disabled = true
       document.querySelector('#props4').disabled = true
+      localStorage.setItem('response', `"${document.querySelector('#question').innerText}"`);
       chatSocket.send(JSON.stringify({
         'message': {
           'type': 'response',
@@ -172,6 +191,7 @@
       document.querySelector('#props2').disabled = true
       document.querySelector('#props1').disabled = true
       document.querySelector('#props4').disabled = true
+      localStorage.setItem('response', `"${document.querySelector('#question').innerText}"`);
 
       chatSocket.send(JSON.stringify({
         'message': {
@@ -188,6 +208,7 @@
       document.querySelector('#props2').disabled = true
       document.querySelector('#props1').disabled = true
       document.querySelector('#props4').disabled = true
+      localStorage.setItem('response', `${document.querySelector('#question').innerText}`);
       chatSocket.send(JSON.stringify({
         'message': {
           'type': 'response',
